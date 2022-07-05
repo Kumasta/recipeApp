@@ -4,9 +4,12 @@ import Recipe from '../models/recipe.js'
 // Controllers
 export const getAllRecipes = async (_req, res) => {
   try {
-    const recipe = await Recipe.find().populate('owner')
-    console.log(recipe)
-    return res.status(200).json(recipe)
+    const recipes = await Recipe.find().populate('owner')
+    // Find all recipes and show owner
+    console.log(recipes)
+    // log the recipes
+    return res.status(200).json(recipes)
+    // return array of recipes to user
   } catch (err) {
     console.log(err)
   }
@@ -16,9 +19,13 @@ export const addRecipe = async (req, res) => {
   try {
 
     console.log('req.currentUser', req.currentUser)
+    // Log current logged in user
     console.log('req.body', req.body)
-    const movieToAdd = await Recipe.create({ ...req.body, owner: req.currentUser._id })
-    return res.status(201).json(movieToAdd)
+    //Log the body of recipe to be added
+    const recipeToAdd = await Recipe.create({ ...req.body, owner: req.currentUser._id })
+    // Create recipe document, add owner from current user id
+    return res.status(201).json(recipeToAdd)
+    // Return new document to user.
   } catch (err) {
     console.log(err)
     return res.status(422).json(err)
@@ -28,9 +35,13 @@ export const addRecipe = async (req, res) => {
 export const getSingleRecipe = async (req, res) => {
   try {
     const { id } = req.params
-    const recipe = await Recipe.findById(id).populate('owner').populate('reviews.owner')
+    // Get recipe Id
+    const recipe = await Recipe.findById(id).populate('owner').populate('comments.owner')
+    // Find recipe by if and show owner details and comments
     console.log(recipe)
+    // log recipe
     return res.status(200).json(recipe)
+    // return recipe document
   } catch (err) {
     console.log(err)
     return res.status(404).json({ message: 'Not Found' })
@@ -40,11 +51,13 @@ export const getSingleRecipe = async (req, res) => {
 export const updateRecipe = async (req, res) => {
   try {
     const { id } = req.params
-    const movieToUpdate = await Recipe.findById(id)
-    if (!movieToUpdate.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
-    Object.assign(movieToUpdate, req.body)
-    await movieToUpdate.save()
-    return res.status(202).json(movieToUpdate)
+    const recipeToUpdate = await Recipe.findById(id)
+    // Get recipe Id
+    if (!recipeToUpdate.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
+    // Check to see if user is owner or authorised to update the recipe
+    Object.assign(recipeToUpdate, req.body)
+    await recipeToUpdate.save()
+    return res.status(202).json(recipeToUpdate)
   } catch (err) {
     console.log(err)
     return res.status(404).json({ message: err.message })
@@ -54,9 +67,9 @@ export const updateRecipe = async (req, res) => {
 export const deleteRecipe = async (req, res) => {
   try {
     const { id } = req.params
-    const movieToDelete = await Recipe.findById(id)
-    if (!movieToDelete.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
-    await movieToDelete.remove()
+    const recipeToDelete = await Recipe.findById(id)
+    if (!recipeToDelete.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
+    await recipeToDelete.remove()
     return res.sendStatus(204)
   } catch (err) {
     console.log(err)
@@ -65,9 +78,9 @@ export const deleteRecipe = async (req, res) => {
 }
 
 
-// Reviews
+// Comments
 
-// Add a review
+// Add a comment
 export const addComment = async (req, res) => {
   try {
     const { id } = req.params
@@ -77,11 +90,11 @@ export const addComment = async (req, res) => {
     if (!recipe) throw new Error('Recipe not found')
     // Define new comment
     const newComment = { ...req.body, owner: req.currentUser._id }
-    // Push newComment to movie.comments
+    // Push newComment to recipe.comments
     recipe.comments.push(newComment)
-    // Once we've pushed newComment to movie.comments, we need to save to finalise the changes
+    // Once we've pushed newComment to recipe.comments, we need to save to finalise the changes
     await recipe.save()
-    // console.log('movie comments', movie.comments)
+    // console.log( recipe comments', recipe.comments)
     return res.status(201).json(recipe)
   } catch (err) {
     console.log(err)
@@ -89,23 +102,23 @@ export const addComment = async (req, res) => {
   }
 }
 
-// Delete Review
-// endpoint: /movies/:id/reviews/:reviewId
+// Delete Comment
+// endpoint:  recipes/:id/comments/:commentId
 export const deleteComment = async (req, res) => {
   try {
-    // Extracting both the movie id (id) and the commentId from the params
+    // Extracting both the recipe id (id) and the commentId from the params
     const { id, commentId } = req.params
     const recipe = await Recipe.findById(id)
-    if (!recipe) throw new Error('Movie not found')
+    if (!recipe) throw new Error('Recipe not found')
     // id() returns the first item that has a _id field matching the argument
-    const commentToDelete = recipe.reviews.id(commentId)
+    const commentToDelete = recipe.commentss.id(commentId)
     // Check commentToDelete is not null
-    if (!commentToDelete) throw new Error('Review not found')
-    // We now need to check that the user making the request owns the review
+    if (!commentToDelete) throw new Error('Comment not found')
+    // We now need to check that the user making the request owns the commnet
     if (!commentToDelete.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
-    // Remove the review
+    // Remove the comment
     await commentToDelete.remove()
-    // Save the movie with the updated path
+    // Save the recipe with the updated path
     await recipe.save()
     // Return response to user
     return res.sendStatus(204)

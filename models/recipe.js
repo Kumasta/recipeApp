@@ -42,24 +42,24 @@ const RecipeSchema = new Schema({
       'halal'
     ],
   },
-  alergens: {
+  alergens: [{
     type: String, enum: [
       'gluten',
-      'Crustaceans',
-      'Eggs',
-      'Fish',
-      'Peanuts',
-      'Soybeans',
-      'Milk',
-      'Nuts',
-      'Celery',
-      'Mustard',
-      'Sesame seeds',
-      'Sulphur dioxide and sulphites',
-      'Lupin',
-      'Molluscs'
+      'crustaceans',
+      'eggs',
+      'fish',
+      'peanuts',
+      'soybeans',
+      'dairy',
+      'nuts',
+      'celery',
+      'mustard',
+      'sesame seeds',
+      'sulphur dioxide and sulphites',
+      'lupin',
+      'molluscs'
     ],
-  },
+  }],
   cuisineType: {
     type: String, enum: [
       'American',
@@ -112,6 +112,10 @@ RecipeSchema.set('toJSON', {
 })
 
 commentSchema.set('toJSON', {
+  virtuals: true,
+})
+
+RecipeRatingSchema.set('toJSON', {
   virtuals: true,
 })
 

@@ -5,19 +5,19 @@ import { secureRoute } from './secureRoute.js'
 // Controllers
 import { getAllRecipes, addRecipe, getSingleRecipe, updateRecipe, deleteRecipe, addComment, deleteComment } from '../controllers/recipe.js'
 import { registerUser, loginUser } from '../controllers/auth.js'
-import { getProfile } from '../controllers/users.js'
+import { getCurrentUserProfile, updateCurrentUserProfile, getAllUsers, viewUserProfile } from '../controllers/users.js'
 
 // Defines the router on which we'll add all of our routes, methods and controllers
 const router = express.Router()
 
 // Recipes
 router.route('/recipes')
-  .get(getAllRecipes)
+  .get(getAllRecipes) // ✅
   .post(secureRoute, addRecipe)
 
-// Single Movie
+// Single recipe
 router.route('/recipes/:id')
-  .get(getSingleRecipe)
+  .get(getSingleRecipe) // ✅
   .put(secureRoute, updateRecipe)
   .delete(secureRoute, deleteRecipe)
 
@@ -28,17 +28,25 @@ router.route('/recipes/:id/comments')
 router.route('/recipes/:id/comments/:commentId')
   .delete(secureRoute, deleteComment)
 
-// Auth routes
+// Auth routes //
 // Register
 router.route('/register')
-  .post(registerUser)
+  .post(registerUser) // ✅
 
 // Login
 router.route('/login')
-  .post(loginUser)
+  .post(loginUser) // ✅
 
 // Profile 
-router.route('/profile/')
-  .get(secureRoute, getProfile)
+
+router.route('/profiles')
+  .get(getAllUsers) // ✅
+
+router.route('/profile')
+  .get(secureRoute, getCurrentUserProfile) // ✅
+  .put(secureRoute, updateCurrentUserProfile)
+
+router.route('/profile/:id')
+  .get(viewUserProfile) // ✅
 
 export default router
