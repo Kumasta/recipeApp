@@ -13,7 +13,7 @@ export default [
   },
   {
     username: 'Jill',
-    email: 'Jill@mail.com',
+    email: 'jill@mail.com',
     password: 'Pass1time',
     passwordConfirmation: 'Pass1time',
     profile: {

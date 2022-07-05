@@ -15,8 +15,8 @@ const userProfile = new Schema({
 })
 
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true, maxlength: 30, minlength: 4 },
-  email: { type: String, required: true, unique: true, match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g },
+  username: { type: String, required: true, unique: true, maxlength: 30, minlength: 4, lowercase: true },
+  email: { type: String, required: true, unique: true, lowercase: true, match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g },
   password: { type: String, required: true, match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm },
   isAdmin: { type: Boolean, default: false },
   profile: userProfile,
