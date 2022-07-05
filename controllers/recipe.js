@@ -54,6 +54,7 @@ export const updateRecipe = async (req, res) => {
     // Get recipe Id from url
     const recipeToUpdate = await Recipe.findById(id)
     // finds and stores recipe by id
+    console.log(req.currentUser)
     if (!recipeToUpdate.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
     // Check to see if user is owner or authorised to update the recipe
     Object.assign(recipeToUpdate, req.body)

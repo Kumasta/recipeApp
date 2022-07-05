@@ -27,10 +27,22 @@ const commentSchema = new Schema({
   timestamps: true,
 })
 
+const ingredientsSchema = new Schema({
+  value: { type: Number, required: true },
+  measure: { type: String, enum: ['', 'ml', 'l', 'g', 'kg', 'tsb', 'tbsp', 'pinch', 'dash', 'stands', 'cm', 'in', 'piece', 'slice', 'head', 'clove', 'tin', 'bulb'] },
+  ingrediant: { type: String, required: true },
+})
+
+const stespsSchema = new Schema({
+  step: { type: String, required: true },
+  image: { type: String, default: 'https://www.nicepng.com/png/full/50-508652_menu-at-getdrawings-com-free-for-personal-people.png' },
+})
 
 const RecipeSchema = new Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true, maxlength: 500 },
+  ingredients: [ingredientsSchema],
+  steps: [stespsSchema],
   type: {
     type: String, enum: [
       'vegan',
