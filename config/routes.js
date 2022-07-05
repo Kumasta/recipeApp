@@ -3,9 +3,10 @@ import express from 'express' // bring in express
 import { secureRoute } from './secureRoute.js'
 
 // Controllers
-import { getAllRecipes, addRecipe, getSingleRecipe, updateRecipe, deleteRecipe, addComment, deleteComment } from '../controllers/recipe.js'
 import { registerUser, loginUser } from '../controllers/auth.js'
+import { getAllRecipes, addRecipe, getSingleRecipe, updateRecipe, deleteRecipe } from '../controllers/recipe.js'
 import { getCurrentUserProfile, updateCurrentUserProfile, getAllUsers, viewUserProfile } from '../controllers/users.js'
+import { addComment, deleteComment } from '../controllers/comments.js'
 
 // Defines the router on which we'll add all of our routes, methods and controllers
 const router = express.Router()
@@ -44,7 +45,7 @@ router.route('/profiles')
 
 router.route('/profile')
   .get(secureRoute, getCurrentUserProfile) // ✅
-  .put(secureRoute, updateCurrentUserProfile)
+  .put(secureRoute, updateCurrentUserProfile) // ✅
 
 router.route('/profile/:id')
   .get(viewUserProfile) // ✅
