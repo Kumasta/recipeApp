@@ -23,12 +23,17 @@ export const updateCurrentUserProfile = async (req, res) => {
     const user = await User.findById(req.currentUser._id)
     // get user docuemtn by Id
     if (!user) throw new Error('User not found')
+    console.log
     // throw error is user in not found or does not exist. 
     const profileToUpdate = user.profile
-    // 
+    // fetched the profile to update
     console.log(profileToUpdate)
+    // log the profil
     Object.assign(profileToUpdate, req.body)
+    console.log(profileToUpdate)
+    // Updates the profile object with body passed 
     await user.save()
+    // saves the profile. 
     return res.status(202).json(profileToUpdate)
   } catch (err) {
     return res.status(404).json({ message: err.message })
@@ -55,11 +60,15 @@ export const getAllUsers = async (_req, res) => {
 export const viewUserProfile = async (req, res) => {
   try {
     const { id } = req.params
-    console.log(id)
+    // grabs id from url
     console.log('id:', id)
+    // logs id
     const user = await User.findById(id).populate('ownedRecipes').populate('profile')
+    // gets urse document by id and shows virtual fields.
     console.log('Succes:', user)
+    // logs the user
     return res.status(200).json(user)
+    // returns the user document
   } catch (err) {
     return res.status(404).json({ message: 'user not found.' })
   }

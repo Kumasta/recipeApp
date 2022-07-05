@@ -8,8 +8,8 @@ const { Schema } = mongoose
 
 //Embbed schema of profile
 const userProfile = new Schema({
-  firstName: { type: String, default: '', maxlength: 30, minlength: 2 },
-  surName: { type: String, default: '', maxlength: 30, minlength: 4 },
+  firstName: { type: String, default: '', maxlength: 30, required: false },
+  surName: { type: String, default: '', maxlength: 30, required: false },
   bio: { type: String, maxlength: 2000, default: '' },
   profilePicURL: { type: String, default: '' },
 })

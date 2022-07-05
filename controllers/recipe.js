@@ -51,13 +51,17 @@ export const getSingleRecipe = async (req, res) => {
 export const updateRecipe = async (req, res) => {
   try {
     const { id } = req.params
+    // Get recipe Id from url
     const recipeToUpdate = await Recipe.findById(id)
-    // Get recipe Id
+    // finds and stores recipe by id
     if (!recipeToUpdate.owner.equals(req.currentUser._id)) throw new Error('Unauthorised')
     // Check to see if user is owner or authorised to update the recipe
     Object.assign(recipeToUpdate, req.body)
+    // assigns recipe object to new body passed
     await recipeToUpdate.save()
+    // saves the new object
     return res.status(202).json(recipeToUpdate)
+    // returns the updated document
   } catch (err) {
     console.log(err)
     return res.status(404).json({ message: err.message })
