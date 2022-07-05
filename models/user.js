@@ -8,13 +8,14 @@ const { Schema } = mongoose
 
 //Embbed schema of profile
 const userProfile = new Schema({
-  name: { type: String, default: '' },
+  firstName: { type: String, default: '' },
+  surName: { type: String, default: '' },
   bio: { type: String, maxlength: 2000, default: '' },
   profilePicURL: { type: String, default: '' },
 })
 
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true, maxlength: 30 },
+  username: { type: String, required: true, unique: true, maxlength: 30, minlength: 4 },
   email: { type: String, required: true, unique: true, match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
